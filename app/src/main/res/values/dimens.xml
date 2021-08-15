@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="welcome_logo_size">200dp</dimen>
+    <dimen name="margin_big_2">90dp</dimen>
+    <dimen name="margin_big_1">60dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_normal_1">16dp</dimen>
+    <dimen name="margin_normal_2">24dp</dimen>
+    <dimen name="margin_normal_3">32dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="margin_padding_size_mini_mini_small">2dp</dimen>
+    <dimen name="margin_padding_size_mini_small">4dp</dimen>
+    <dimen name="margin_padding_size_small">8dp</dimen>
+    <dimen name="margin_padding_size_small_l">6dp</dimen>
+    <dimen name="margin_padding_size_small_xl">12dp</dimen>
+    <dimen name="margin_padding_size_medium">16dp</dimen>
+    <dimen name="margin_padding_size_large">24dp</dimen>
+    <dimen name="margin_padding_size_xlarge">32dp</dimen>
+    <dimen name="margin_padding_size_xxlarge">40dp</dimen>
+
+    <dimen name="radius_very_small">2dp</dimen>
+    <dimen name="radius_small">4dp</dimen>
+    <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_large">12dp</dimen>
+
+    <dimen name="text_button">14sp</dimen>
+    <dimen name="text_menu">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_body1">14sp</dimen>
+    <dimen name="text_body2">13sp</dimen>
+    <dimen name="text_subhead">16sp</dimen>
+    <dimen name="text_title">20sp</dimen>
+    <dimen name="text_headline">24sp</dimen>
+    <dimen name="text_display1">34sp</dimen>
+    <dimen name="text_display2">45sp</dimen>
+    <dimen name="text_display3">56sp</dimen>
+    <dimen name="text_display4">112sp</dimen>
+
+    <dimen name="buttons_normal_size">40dp</dimen>
+    <dimen name="buttons_small_size">32dp</dimen>
+
+</resources>

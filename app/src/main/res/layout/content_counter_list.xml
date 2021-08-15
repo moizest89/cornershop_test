@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/white"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:id="@+id/progressBar" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayoutEmptyState"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:animateLayoutChanges="true"
+        android:layout_marginStart="@dimen/margin_normal_3"
+        android:layout_marginEnd="@dimen/margin_normal_3"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_counters"
+            android:textSize="@dimen/text_title"
+            android:textColor="@color/primaryTextColor"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_counters_phrase"
+            android:textSize="@dimen/text_subhead"
+            android:gravity="center"
+            android:textColor="@color/secondaryTextColor"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linearLayoutCounterItems"
+        android:background="@color/white"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textViewTotalItems"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_body1"
+                android:padding="@dimen/margin_padding_size_small_xl"
+                tools:visibility="visible"
+                tools:text="Total Items"/>
+            <TextView
+                android:id="@+id/textViewTotalTimes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_body1"
+                android:padding="@dimen/margin_padding_size_small_xl"
+                tools:visibility="visible"
+                tools:text="Total Items"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewData"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:listitem="@layout/item_counter_list"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+
+    </LinearLayout>
+
+</FrameLayout>
