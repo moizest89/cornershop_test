@@ -4,6 +4,7 @@ import android.content.Context
 import com.cornershop.counterstest.BuildConfig
 import com.cornershop.counterstest.data.datasources.remote.ConnectivityInterceptor
 import com.cornershop.counterstest.data.datasources.remote.RemoteDataService
+import com.cornershop.counterstest.data.datasources.sharepreference.SharePreference
 import com.cornershop.counterstest.data.utils.WifiService
 import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.Module
@@ -69,5 +70,8 @@ object NetworkModule {
 
     @Provides
     fun providerInterceptor(wifiService: WifiService) = ConnectivityInterceptor(wifiService)
+
+    @Provides
+    fun providerSharePreference(@ApplicationContext context: Context) = SharePreference(context)
 
 }
