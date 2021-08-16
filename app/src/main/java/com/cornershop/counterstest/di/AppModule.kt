@@ -5,6 +5,7 @@ import com.cornershop.counterstest.BuildConfig
 import com.cornershop.counterstest.data.datasources.remote.ConnectivityInterceptor
 import com.cornershop.counterstest.data.datasources.remote.RemoteDataService
 import com.cornershop.counterstest.data.datasources.sharepreference.SharePreference
+import com.cornershop.counterstest.data.utils.Utils
 import com.cornershop.counterstest.data.utils.WifiService
 import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.Module
@@ -20,7 +21,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object AppModule {
 
     @Singleton
     @Provides
@@ -47,7 +48,7 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.API_URL)
+            .baseUrl(Utils.API_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
