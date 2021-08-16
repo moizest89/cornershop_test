@@ -8,6 +8,7 @@
     <dimen name="margin_normal_2">24dp</dimen>
     <dimen name="margin_normal_3">32dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="progress_small_size">24dp</dimen>
 
     <dimen name="margin_padding_size_mini_mini_small">2dp</dimen>
     <dimen name="margin_padding_size_mini_small">4dp</dimen>

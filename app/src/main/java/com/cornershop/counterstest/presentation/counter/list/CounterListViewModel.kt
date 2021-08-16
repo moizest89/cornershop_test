@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.domain.models.CountModel
 import com.cornershop.counterstest.domain.usecases.counter.*
 import com.cornershop.counterstest.domain.utils.Command
+import com.cornershop.counterstest.domain.utils.CommandError
+import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CounterListViewModel @Inject constructor(
+    private val networkUtils: NetworkUtils,
     private val getAllCounterItemsUseCase: GetAllCounterItemsUseCase,
     private val addCountItemUseCase: AddCountItemUseCase,
     private val deleteCounterItemUseCase: DeleteCounterItemUseCase,
@@ -25,7 +28,11 @@ class CounterListViewModel @Inject constructor(
     fun addNewCounterItem(name: String) {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            counterData.value = addCountItemUseCase.invoke(name)
+            if(networkUtils.hasInternetConnection()){
+                counterData.value = addCountItemUseCase.invoke(name)
+            }else{
+                counterData.value = Command.Error(error = CommandError.InternetConnection)
+            }
             counterData.value = Command.Loading(isLoading = false)
         }
     }
@@ -33,7 +40,11 @@ class CounterListViewModel @Inject constructor(
     fun getAllCounterItems() {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            counterData.value = getAllCounterItemsUseCase.invoke()
+            if(networkUtils.hasInternetConnection()) {
+                counterData.value = getAllCounterItemsUseCase.invoke()
+            }else{
+                counterData.value = Command.Error(error = CommandError.InternetConnection)
+            }
             counterData.value = Command.Loading(isLoading = false)
         }
     }
@@ -41,7 +52,11 @@ class CounterListViewModel @Inject constructor(
     fun incrementCounterItem(countModel: CountModel, position: Int) {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            counterData.value = incrementCountByItemUseCase.invoke(countModel)
+            if(networkUtils.hasInternetConnection()) {
+                counterData.value = incrementCountByItemUseCase.invoke(countModel)
+            }else{
+                counterData.value = Command.Error(error = CommandError.InternetConnection)
+            }
             counterData.value = Command.Loading(isLoading = false)
         }
     }
@@ -50,7 +65,11 @@ class CounterListViewModel @Inject constructor(
         if (countModel.count > 0) {
             viewModelScope.launch {
                 counterData.value = Command.Loading(isLoading = true)
-                counterData.value = decrementCountByItemUseCase.invoke(countModel)
+                if(networkUtils.hasInternetConnection()) {
+                    counterData.value = decrementCountByItemUseCase.invoke(countModel)
+                }else{
+                    counterData.value = Command.Error(error = CommandError.InternetConnection)
+                }
                 counterData.value = Command.Loading(isLoading = false)
             }
         }

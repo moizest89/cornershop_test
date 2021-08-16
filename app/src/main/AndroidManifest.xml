@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cornershop.counterstest">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -17,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CountersNormal"
         android:usesCleartextTraffic="true">
+        <activity android:name=".presentation.counter.add.CounterAddActivity"
+            android:label="@string/create_counter"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".presentation.counter.list.CounterListActivity"
             android:label="@string/title_activity_counter_list"

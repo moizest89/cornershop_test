@@ -1,14 +1,16 @@
-package com.cornershop.counterstest.data.utils
+package com.cornershop.counterstest.presentation.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
+import javax.inject.Inject
 
-object Utils {
+class NetworkUtils @Inject constructor (private val context: Context?) {
+
     @RequiresApi(Build.VERSION_CODES.M)
-    fun hasInternetConnection(context: Context?): Boolean {
+    fun hasInternetConnection(): Boolean {
         if (context == null)
             return false
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
