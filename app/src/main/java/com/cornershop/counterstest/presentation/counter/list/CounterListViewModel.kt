@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.cornershop.counterstest.domain.models.CountModel
 import com.cornershop.counterstest.domain.usecases.counter.*
 import com.cornershop.counterstest.domain.utils.Command
+import com.cornershop.counterstest.domain.utils.CommandError
+import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CounterListViewModel @Inject constructor(
+    private val networkUtils: NetworkUtils,
     private val getAllCounterItemsUseCase: GetAllCounterItemsUseCase,
     private val addCountItemUseCase: AddCountItemUseCase,
     private val deleteCounterItemUseCase: DeleteCounterItemUseCase,

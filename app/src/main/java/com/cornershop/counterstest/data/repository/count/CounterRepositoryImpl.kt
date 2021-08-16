@@ -29,7 +29,7 @@ class CounterRepositoryImpl @Inject constructor(
             }
             return RepositoryResult.Error("${response.code()} ${response.message()}")
         } catch (e: Exception) {
-            return RepositoryResult.Error(e.message ?: e.toString())
+            return e.errorMessage()
         } catch (e: HttpException) {
             return e.errorMessage()
         }
@@ -47,7 +47,7 @@ class CounterRepositoryImpl @Inject constructor(
             }
             return RepositoryResult.Error("${response.code()} ${response.message()}")
         } catch (e: Exception) {
-            return RepositoryResult.Error(e.message ?: e.toString())
+            return e.errorMessage()
         } catch (e: HttpException) {
             return e.errorMessage()
         }
@@ -64,7 +64,7 @@ class CounterRepositoryImpl @Inject constructor(
             }
             return RepositoryResult.Error("${response.code()} ${response.message()}")
         } catch (e: Exception) {
-            return RepositoryResult.Error(e.message ?: e.toString())
+            return e.errorMessage()
         } catch (e: HttpException) {
             return e.errorMessage()
         }
@@ -96,7 +96,7 @@ class CounterRepositoryImpl @Inject constructor(
             }
             return RepositoryResult.Error("${response.code()} ${response.message()}")
         } catch (e: Exception) {
-            return RepositoryResult.Error(e.message ?: e.toString())
+            return e.errorMessage()
         } catch (e: HttpException) {
             return e.errorMessage()
         }
