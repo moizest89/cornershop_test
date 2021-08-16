@@ -28,11 +28,7 @@ class CounterListViewModel @Inject constructor(
     fun addNewCounterItem(name: String) {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            if(networkUtils.hasInternetConnection()){
-                counterData.value = addCountItemUseCase.invoke(name)
-            }else{
-                counterData.value = Command.Error(error = CommandError.InternetConnection)
-            }
+            counterData.value = addCountItemUseCase.invoke(name)
             counterData.value = Command.Loading(isLoading = false)
         }
     }
@@ -40,11 +36,7 @@ class CounterListViewModel @Inject constructor(
     fun getAllCounterItems() {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            if(networkUtils.hasInternetConnection()) {
-                counterData.value = getAllCounterItemsUseCase.invoke()
-            }else{
-                counterData.value = Command.Error(error = CommandError.InternetConnection)
-            }
+            counterData.value = getAllCounterItemsUseCase.invoke()
             counterData.value = Command.Loading(isLoading = false)
         }
     }
@@ -52,11 +44,7 @@ class CounterListViewModel @Inject constructor(
     fun incrementCounterItem(countModel: CountModel, position: Int) {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            if(networkUtils.hasInternetConnection()) {
-                counterData.value = incrementCountByItemUseCase.invoke(countModel)
-            }else{
-                counterData.value = Command.Error(error = CommandError.InternetConnection)
-            }
+            counterData.value = incrementCountByItemUseCase.invoke(countModel)
             counterData.value = Command.Loading(isLoading = false)
         }
     }
@@ -65,11 +53,7 @@ class CounterListViewModel @Inject constructor(
         if (countModel.count > 0) {
             viewModelScope.launch {
                 counterData.value = Command.Loading(isLoading = true)
-                if(networkUtils.hasInternetConnection()) {
-                    counterData.value = decrementCountByItemUseCase.invoke(countModel)
-                }else{
-                    counterData.value = Command.Error(error = CommandError.InternetConnection)
-                }
+                counterData.value = decrementCountByItemUseCase.invoke(countModel)
                 counterData.value = Command.Loading(isLoading = false)
             }
         }

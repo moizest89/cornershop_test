@@ -5,6 +5,7 @@ import com.cornershop.counterstest.data.utils.RepositoryResult
 import com.cornershop.counterstest.domain.models.CountModel
 import com.cornershop.counterstest.domain.utils.Command
 import com.cornershop.counterstest.domain.utils.CommandError
+import com.cornershop.counterstest.domain.utils.toCommandError
 import javax.inject.Inject
 
 class DeleteCounterItemUseCase @Inject constructor(
@@ -13,7 +14,7 @@ class DeleteCounterItemUseCase @Inject constructor(
     override suspend fun invoke( countModel: CountModel): Command {
         return when(val result = counterRepository.deleteCounterItem(countModel)){
             is RepositoryResult.Success -> Command.DeleteCountItemData( item = result.data)
-            is RepositoryResult.Error -> Command.Error( CommandError.SimpleErrorMessage(result.message))
+            is RepositoryResult.Error -> result.toCommandError()
         }
     }
 }

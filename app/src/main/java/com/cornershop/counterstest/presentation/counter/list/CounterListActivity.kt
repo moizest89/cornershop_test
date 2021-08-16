@@ -109,11 +109,11 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
                 this.adapter.deleteItem(command.item)
             }
             is Command.RefreshAllCountData -> {
-                if(this.cardViewSearchCounter.visibility == View.GONE)
+                if (this.cardViewSearchCounter.visibility == View.GONE)
                     this.cardViewSearchCounter.visibility = View.VISIBLE
-                if(this.fab.visibility == View.GONE)
+                if (this.fab.visibility == View.GONE)
                     this.fab.visibility = View.VISIBLE
-                if(this.linearLayoutInternetState.visibility == View.VISIBLE)
+                if (this.linearLayoutInternetState.visibility == View.VISIBLE)
                     this.linearLayoutInternetState.visibility = View.GONE
 
                 this.adapter.addItems(command.data)
@@ -135,11 +135,15 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
     private fun showCommandError(commandError: CommandError) {
         when (commandError) {
             is CommandError.InternetConnection -> {
-                Utils.showSimpleErrorDialog(
-                    this@CounterListActivity,
-                    getString(R.string.error_creating_counter_title),
-                    getString(R.string.connection_error_description)
-                )
+                if (this.adapter.itemCount == 0) {
+                    internetStateView(false)
+                } else {
+                    Utils.showSimpleErrorDialog(
+                        this@CounterListActivity,
+                        getString(R.string.error_creating_counter_title),
+                        getString(R.string.connection_error_description)
+                    )
+                }
             }
             is CommandError.SimpleErrorMessage -> {
                 Utils.showSimpleErrorDialog(
@@ -153,28 +157,10 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
     }
 
     private fun initRequest() {
-        this.linearLayoutEmptyState.visibility = View.GONE
-        this.swipeRefreshLayout.visibility = View.GONE
-        this.progressBar.visibility = View.VISIBLE
-        if (networkUtils.hasInternetConnection()) {
-            this.counterListViewModel.getAllCounterItems()
-        } else {
-            internetStateView(false)
-        }
+        this.counterListViewModel.getAllCounterItems()
     }
 
     private fun addNewItem() {
-//        val view = inflateLayout().inflate(R.layout.item_edit_text, null)
-//        val editText = view.findViewById<EditText>(R.id.editText)
-//        AlertDialog.Builder(this)
-//            .setView(view)
-//            .setMessage(R.string.welcome_description)
-//            .setPositiveButton(R.string.add) { _, _ ->
-//                onAddItemCount(editText.text.toString().trim())
-//            }
-//            .setNegativeButton(android.R.string.cancel) { _, _ -> }
-//            .setCancelable(false)
-//            .show()
         startForResult.launch(Intent(this, CounterAddActivity::class.java))
     }
 
@@ -283,11 +269,29 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
                 true
             }
             R.id.menu_share_action -> {
-
+                onShareItemCount(
+                    this.adapter.getLongItemCounterItemSelected()
+                )
                 mode.finish()
                 true
             }
             else -> false
+        }
+    }
+
+    private fun onShareItemCount(
+        longItemCounterItemSelected: CountModel?
+    ) {
+        longItemCounterItemSelected?.let { countModel ->
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    getString(R.string.n_per_counter_name, countModel.count, countModel.title)
+                )
+                type = "text/plain"
+                startActivity(Intent.createChooser(this, getString(R.string.share)))
+            }
         }
     }
 
@@ -298,7 +302,11 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
 
     override fun onActivityResult(result: ActivityResult?) {
         if (result?.resultCode == RESULT_OK) {
-            this.counterListViewModel.getAllCounterItems()
+            result.data?.extras?.getParcelable<CountModel>(Utils.DATA)?.let {
+                this.adapter.addItem(it)
+            } ?: run {
+                this.counterListViewModel.getAllCounterItems()
+            }
         }
     }
 

@@ -32,6 +32,8 @@
                 android:layout_gravity="end"
                 android:animationCache="true"
                 android:text="@string/save"
+                android:enabled="false"
+                android:alpha="0.3"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/text_button"
                 android:visibility="visible" />

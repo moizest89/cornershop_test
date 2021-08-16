@@ -7,6 +7,8 @@ import com.cornershop.counterstest.R
 
 object Utils {
 
+    const val DATA = "sendData"
+
     fun showSimpleErrorDialog(
         context: Context,
         title: String,
@@ -22,5 +24,7 @@ object Utils {
             .setCancelable(false)
             .show()
     }
+
+
 
 }

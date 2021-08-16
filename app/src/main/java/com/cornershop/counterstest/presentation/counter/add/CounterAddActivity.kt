@@ -15,6 +15,7 @@ import com.cornershop.counterstest.domain.utils.Command
 import com.cornershop.counterstest.domain.utils.CommandError
 import com.cornershop.counterstest.presentation.counter.list.CounterListViewModel
 import com.cornershop.counterstest.presentation.utils.Utils
+import com.cornershop.counterstest.presentation.utils.onTextChange
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,10 +41,22 @@ class CounterAddActivity : AppCompatActivity() {
             observeData(it)
         }
 
+        this.textInputLayoutCounterName.editText?.onTextChange{
+            if(it.isNullOrBlank()) {
+                materialButtonSave.isEnabled = false
+                materialButtonSave.alpha = 0.3f
+            }else{
+                materialButtonSave.isEnabled = true
+                materialButtonSave.alpha = 1f
+            }
+        }
         this.materialButtonSave.setOnClickListener {
-            this.counterListViewModel.addNewCounterItem(
-                textInputLayoutCounterName.editText?.text.toString().trim()
-            )
+            val name = textInputLayoutCounterName.editText?.text.toString().trim()
+            if(name.isNotBlank()) {
+                this.counterListViewModel.addNewCounterItem(
+                    textInputLayoutCounterName.editText?.text.toString().trim()
+                )
+            }
         }
     }
 
@@ -63,7 +76,11 @@ class CounterAddActivity : AppCompatActivity() {
     private fun observeData(command: Command) {
         when (command) {
             is Command.AddOrUpdateCountItemData -> {
-                setResult(RESULT_OK, Intent())
+                val bundle = Bundle()
+                bundle.putParcelable(Utils.DATA, command.item)
+                val intent = Intent()
+                intent.putExtras(bundle)
+                setResult(RESULT_OK, intent)
                 finish()
             }
             is Command.Error -> {

@@ -1,11 +1,10 @@
 package com.cornershop.counterstest.di
 
 import android.content.Context
-import androidx.room.PrimaryKey
 import com.cornershop.counterstest.BuildConfig
-import com.cornershop.counterstest.data.datasources.db.CounterDao
-import com.cornershop.counterstest.data.datasources.db.CounterDataBase
+import com.cornershop.counterstest.data.datasources.remote.ConnectivityInterceptor
 import com.cornershop.counterstest.data.datasources.remote.RemoteDataService
+import com.cornershop.counterstest.data.utils.WifiService
 import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.Module
 import dagger.Provides
@@ -24,9 +23,12 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient(): OkHttpClient {
+    fun provideHttpClient(
+        connectivityInterceptor: ConnectivityInterceptor
+    ): OkHttpClient {
         return OkHttpClient
             .Builder()
+            .addInterceptor(connectivityInterceptor)
             .readTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
             .build()
@@ -44,7 +46,7 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://127.0.0.1:3000/api/v1/")
+            .baseUrl(BuildConfig.API_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
@@ -57,7 +59,15 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideNetworkUtils( @ApplicationContext context: Context ) : NetworkUtils =
+    fun provideNetworkUtils(@ApplicationContext context: Context): NetworkUtils =
         NetworkUtils(context)
+
+    @Singleton
+    @Provides
+    fun provideWifiService(@ApplicationContext context: Context): WifiService =
+        WifiService(context)
+
+    @Provides
+    fun providerInterceptor(wifiService: WifiService) = ConnectivityInterceptor(wifiService)
 
 }
