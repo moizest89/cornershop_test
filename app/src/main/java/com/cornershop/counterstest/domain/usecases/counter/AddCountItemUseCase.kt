@@ -16,6 +16,7 @@ class AddCountItemUseCase @Inject constructor(
         return when(val result = counterRepository.addCounterItem(name)){
             is RepositoryResult.Success -> Command.AddOrUpdateCountItemData(item = result.data)
             is RepositoryResult.Error -> result.toCommandError()
+            is RepositoryResult.Loading -> Command.Loading(result.isLoading)
         }
     }
 }

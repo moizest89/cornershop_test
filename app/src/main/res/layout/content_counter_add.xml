@@ -28,6 +28,9 @@
             android:id="@+id/default_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minLines="1"
+            android:maxLines="1"
+            android:singleLine="true"
             android:hint="@string/counter_name_hint"
             android:textColorHighlight="@color/gray" />
 

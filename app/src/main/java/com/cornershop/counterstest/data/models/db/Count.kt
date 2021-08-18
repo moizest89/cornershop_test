@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Channel(
+data class CountItem(
     @PrimaryKey var id: String = "",
     var count: Int = 0,
     var title: String = ""

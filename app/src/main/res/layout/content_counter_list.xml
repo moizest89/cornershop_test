@@ -9,6 +9,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
+    <TextView
+        android:id="@+id/textViewSearchResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_results"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_title"
+        android:visibility="gone" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -141,6 +151,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/margin_big_1"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_counter_list" />
         </LinearLayout>

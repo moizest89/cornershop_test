@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +26,8 @@ import com.cornershop.counterstest.presentation.base.BaseActivity
 import com.cornershop.counterstest.presentation.counter.add.CounterAddActivity
 import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import com.cornershop.counterstest.presentation.utils.Utils
+import com.cornershop.counterstest.presentation.utils.hideKeyboard
+import com.cornershop.counterstest.presentation.utils.onTextChange
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -45,8 +45,11 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
 
     private lateinit var linearLayoutCounterItems: LinearLayout
     private lateinit var linearLayoutInternetState: LinearLayout
+    private lateinit var editTextSearchInformation: EditText
     private lateinit var linearLayoutEmptyState: LinearLayout
     private lateinit var cardViewSearchCounter: CardView
+    private lateinit var imageViewRemoveFocus: ImageView
+    private lateinit var textViewSearchResult: TextView
     private lateinit var materialButtonRetry: MaterialButton
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var textViewTotalItems: TextView
@@ -86,13 +89,17 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
             this.initRequest()
         }
         this.initRequest()
+        this.searchCounterItemInList()
     }
 
     private fun inflateItemViews() {
         this.linearLayoutCounterItems = this.findViewById(R.id.linearLayoutCounterItems)
         this.linearLayoutInternetState = this.findViewById(R.id.linearLayoutInternetState)
+        this.editTextSearchInformation = this.findViewById(R.id.editTextSearchInformation)
         this.linearLayoutEmptyState = this.findViewById(R.id.linearLayoutEmptyState)
         this.cardViewSearchCounter = this.findViewById(R.id.cardViewSearchCounter)
+        this.textViewSearchResult = this.findViewById(R.id.textViewSearchResult)
+        this.imageViewRemoveFocus = this.findViewById(R.id.imageViewRemoveFocus)
         this.materialButtonRetry = this.findViewById(R.id.materialButtonRetry)
         this.swipeRefreshLayout = this.findViewById(R.id.swipeRefreshLayout)
         this.textViewTotalItems = this.findViewById(R.id.textViewTotalItems)
@@ -128,6 +135,18 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
                 this.progressAction(command.isLoading)
                 this.swipeRefreshLayout.isRefreshing = command.isLoading
             }
+            is Command.SearchCounterItemData -> {
+                if(command.data.isNotEmpty()){
+                    if(this.swipeRefreshLayout.visibility == View.GONE) {
+                        this.swipeRefreshLayout.visibility = View.VISIBLE
+                    }
+                    this.adapter.addItems(command.data)
+                    this.textViewSearchResult.visibility = View.GONE
+                }else{
+                    this.textViewSearchResult.visibility = View.VISIBLE
+                    this.swipeRefreshLayout.visibility = View.GONE
+                }
+            }
         }
     }
 
@@ -140,7 +159,7 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
                 } else {
                     Utils.showSimpleErrorDialog(
                         this@CounterListActivity,
-                        getString(R.string.error_creating_counter_title),
+                        getString(R.string.generic_error_description),
                         getString(R.string.connection_error_description)
                     )
                 }
@@ -245,6 +264,26 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
     private fun showSnackbarErrorMessage(message: String?) {
         Snackbar.make(this.fab, message ?: "", Snackbar.LENGTH_LONG).setAction(R.string.ok, null)
             .show()
+    }
+
+    private fun searchCounterItemInList() {
+        this.editTextSearchInformation.onTextChange {
+            counterListViewModel.searchCounterItemByName(it?.toString()!!)
+        }
+        this.editTextSearchInformation.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                this.appBarLayout.elevation = 0.4f
+                this.imageViewRemoveFocus.visibility = View.VISIBLE
+            } else {
+                this.appBarLayout.elevation = 0.0f
+                this.imageViewRemoveFocus.visibility = View.GONE
+                this.editTextSearchInformation.hideKeyboard()
+            }
+        }
+        this.imageViewRemoveFocus.setOnClickListener {
+            this.editTextSearchInformation.setText("")
+            this.editTextSearchInformation.clearFocus()
+        }
     }
 
     /// ActionMode.Callback

@@ -4,6 +4,7 @@ import com.cornershop.counterstest.domain.models.CountModel
 
 sealed class Command {
     data class RefreshAllCountData(val data: MutableList<CountModel>) : Command()
+    data class SearchCounterItemData(val data: MutableList<CountModel>) : Command()
     data class AddOrUpdateCountItemData(val item: CountModel?) : Command()
     data class DeleteCountItemData(val item: CountModel?) : Command()
     data class Loading(var isLoading: Boolean) : Command()

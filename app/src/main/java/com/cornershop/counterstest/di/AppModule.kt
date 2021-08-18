@@ -1,7 +1,10 @@
 package com.cornershop.counterstest.di
 
 import android.content.Context
+import androidx.room.Room
 import com.cornershop.counterstest.BuildConfig
+import com.cornershop.counterstest.data.datasources.db.CounterDao
+import com.cornershop.counterstest.data.datasources.db.CounterDataBase
 import com.cornershop.counterstest.data.datasources.remote.ConnectivityInterceptor
 import com.cornershop.counterstest.data.datasources.remote.RemoteDataService
 import com.cornershop.counterstest.data.datasources.sharepreference.SharePreference
@@ -52,6 +55,21 @@ object AppModule {
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCounterDataBase(@ApplicationContext appContext: Context): CounterDataBase {
+        return Room.databaseBuilder(
+            appContext,
+            CounterDataBase::class.java,
+            "cornershop.counterstest"
+        ).build()
+    }
+
+    @Provides
+    fun provideCounterDao(counterDataBase: CounterDataBase): CounterDao {
+        return counterDataBase.counterDao()
     }
 
     @Singleton

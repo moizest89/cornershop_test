@@ -39,13 +39,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
+                    android:id="@+id/editTextSearchInformation"
                     android:drawableStart="@drawable/ic_search"
                     android:drawablePadding="@dimen/margin_small"
                     android:hint="@string/search_counters"
                     android:paddingStart="@dimen/margin_padding_size_small_xl"
                     android:textColor="@color/black"
                     android:textColorHint="@color/primaryTextColor"
-                    android:textSize="@dimen/text_menu" />
+                    android:textSize="@dimen/text_menu"
+                    android:inputType="text" />
+                
+                <ImageView
+                    android:layout_width="@dimen/buttons_normal_size"
+                    android:layout_height="@dimen/buttons_normal_size"
+                    android:src="@drawable/ic_close_black"
+                    android:padding="12dp"
+                    android:layout_marginEnd="@dimen/margin_padding_size_small"
+                    android:layout_gravity="center|end"
+                    android:visibility="gone"
+                    android:id="@+id/imageViewRemoveFocus"
+                    />
             </androidx.cardview.widget.CardView>
 
         </androidx.appcompat.widget.Toolbar>

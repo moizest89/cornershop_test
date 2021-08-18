@@ -2,7 +2,7 @@
 <resources>
     <dimen name="welcome_logo_size">200dp</dimen>
     <dimen name="margin_big_2">90dp</dimen>
-    <dimen name="margin_big_1">60dp</dimen>
+    <dimen name="margin_big_1">64dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_normal_1">16dp</dimen>
     <dimen name="margin_normal_2">24dp</dimen>
@@ -40,5 +40,7 @@
 
     <dimen name="buttons_normal_size">40dp</dimen>
     <dimen name="buttons_small_size">32dp</dimen>
+    <dimen name="menu_simple_icon">24dp</dimen>
+
 
 </resources>

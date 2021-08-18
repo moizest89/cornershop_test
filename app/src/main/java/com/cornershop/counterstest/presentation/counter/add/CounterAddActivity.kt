@@ -2,9 +2,11 @@ package com.cornershop.counterstest.presentation.counter.add
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView.OnEditorActionListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -41,22 +43,37 @@ class CounterAddActivity : AppCompatActivity() {
             observeData(it)
         }
 
-        this.textInputLayoutCounterName.editText?.onTextChange{
-            if(it.isNullOrBlank()) {
+        this.textInputLayoutCounterName.editText?.onTextChange {
+            if (it.isNullOrBlank()) {
                 materialButtonSave.isEnabled = false
                 materialButtonSave.alpha = 0.3f
-            }else{
+            } else {
                 materialButtonSave.isEnabled = true
                 materialButtonSave.alpha = 1f
             }
         }
-        this.materialButtonSave.setOnClickListener {
-            val name = textInputLayoutCounterName.editText?.text.toString().trim()
-            if(name.isNotBlank()) {
-                this.counterListViewModel.addNewCounterItem(
-                    textInputLayoutCounterName.editText?.text.toString().trim()
-                )
+
+        this.textInputLayoutCounterName.editText?.setOnEditorActionListener { v, actionId, event ->
+            if (actionId != 0 || event.action === KeyEvent.ACTION_DOWN) {
+                sendData()
+                true
+            } else {
+                false
             }
+        }
+
+        this.materialButtonSave.setOnClickListener {
+            sendData()
+        }
+
+    }
+
+    private fun sendData() {
+        val name = textInputLayoutCounterName.editText?.text.toString().trim()
+        if (name.isNotBlank()) {
+            this.counterListViewModel.addNewCounterItem(
+                textInputLayoutCounterName.editText?.text.toString().trim()
+            )
         }
     }
 

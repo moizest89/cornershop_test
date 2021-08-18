@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.domain.models.CountModel
 import com.google.android.material.button.MaterialButton
+import java.util.*
 
 class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
     RecyclerView.Adapter<CounterAdapter.Holder>() {
 
     private val counterList = mutableListOf<CountModel>()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder =
         Holder(LayoutInflater.from(parent.context).inflate(R.layout.item_counter_list, null))
@@ -129,6 +129,10 @@ class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
             }
         }
         this.onTotalSumCounter(this.counterList)
+    }
+
+    fun searchElementInList( predicate : String){
+
     }
 
     fun getLongItemCounterItemSelected(): CountModel? {

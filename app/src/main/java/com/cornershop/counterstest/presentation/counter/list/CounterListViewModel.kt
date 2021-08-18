@@ -9,17 +9,21 @@ import com.cornershop.counterstest.domain.utils.Command
 import com.cornershop.counterstest.domain.utils.CommandError
 import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CounterListViewModel @Inject constructor(
-    private val networkUtils: NetworkUtils,
     private val getAllCounterItemsUseCase: GetAllCounterItemsUseCase,
     private val addCountItemUseCase: AddCountItemUseCase,
     private val deleteCounterItemUseCase: DeleteCounterItemUseCase,
     private val incrementCountByItemUseCase: IncrementCountByItemUseCase,
-    private val decrementCountByItemUseCase: DecrementCountByItemUseCase
+    private val decrementCountByItemUseCase: DecrementCountByItemUseCase,
+    private val searchCountItemByTitleUseCase: SearchCountItemByTitleUseCase
 ) : ViewModel() {
 
     private val _counterData: MutableLiveData<Command> = MutableLiveData()
@@ -36,7 +40,9 @@ class CounterListViewModel @Inject constructor(
     fun getAllCounterItems() {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            counterData.value = getAllCounterItemsUseCase.invoke()
+            getAllCounterItemsUseCase.invoke().collect {
+                counterData.value = it
+            }
             counterData.value = Command.Loading(isLoading = false)
         }
     }
@@ -56,6 +62,15 @@ class CounterListViewModel @Inject constructor(
                 counterData.value = decrementCountByItemUseCase.invoke(countModel)
                 counterData.value = Command.Loading(isLoading = false)
             }
+        }
+    }
+
+    fun searchCounterItemByName(name: String) {
+        viewModelScope.launch {
+            val items = withContext(Dispatchers.IO){
+                searchCountItemByTitleUseCase.invoke(name)
+            }
+            counterData.value = items
         }
     }
 
