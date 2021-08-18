@@ -14,7 +14,7 @@ Build this app using the [following spec](https://www.figma.com/file/qBcG5Poxuny
 
 ### Result
 
-   ![video_1](https://i.imgur.com/0AVhSrM.gif)  ![video_2](https://i.imgur.com/a4nzngi.gif)
+   ![video_1](https://i.imgur.com/0AVhSrM.gif) |  ![video_2](https://i.imgur.com/a4nzngi.gif)
    
    
 ### Installation
