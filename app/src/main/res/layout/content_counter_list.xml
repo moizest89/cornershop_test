@@ -9,93 +9,152 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-    <ProgressBar
+    <TextView
+        android:id="@+id/textViewSearchResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:id="@+id/progressBar" />
+        android:text="@string/no_results"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_title"
+        android:visibility="gone" />
 
-    <LinearLayout
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/orange"
+        android:visibility="gone" />
+
+    <LinearLayout
         android:id="@+id/linearLayoutEmptyState"
-        android:visibility="gone"
-        android:background="@color/white"
-        android:animateLayoutChanges="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginStart="@dimen/margin_normal_3"
         android:layout_marginEnd="@dimen/margin_normal_3"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:animateLayoutChanges="true"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_counters"
-            android:textSize="@dimen/text_title"
-            android:textColor="@color/primaryTextColor"
             android:layout_gravity="center"
-            />
+            android:text="@string/no_counters"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="@dimen/text_title" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_counters_phrase"
-            android:textSize="@dimen/text_subhead"
             android:gravity="center"
+            android:text="@string/no_counters_phrase"
             android:textColor="@color/secondaryTextColor"
-            />
+            android:textSize="@dimen/text_subhead" />
 
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/linearLayoutCounterItems"
+        android:id="@+id/linearLayoutInternetState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/margin_normal_3"
+        android:layout_marginEnd="@dimen/margin_normal_3"
+        android:animateLayoutChanges="true"
         android:background="@color/white"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/textViewTotalItems"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_body1"
-                android:padding="@dimen/margin_padding_size_small_xl"
-                tools:visibility="visible"
-                tools:text="Total Items"/>
-            <TextView
-                android:id="@+id/textViewTotalTimes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_body1"
-                android:padding="@dimen/margin_padding_size_small_xl"
-                tools:visibility="visible"
-                tools:text="Total Items"/>
-        </LinearLayout>
+            android:layout_gravity="center"
+            android:text="@string/error_load_counters_title"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="@dimen/text_title" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewData"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:listitem="@layout/item_counter_list"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/connection_error_description"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="@dimen/text_subhead" />
 
-
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/materialButtonRetry"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_normal_2"
+            android:animationCache="true"
+            android:text="@string/retry"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/text_button"
+            android:visibility="visible" />
     </LinearLayout>
 
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:swipeRefreshLayoutProgressSpinnerBackgroundColor="@color/orange"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutCounterItems"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewTotalItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:padding="@dimen/margin_padding_size_small_xl"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_body1"
+                    android:textStyle="bold"
+                    tools:text="Total Items"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/textViewTotalTimes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:padding="@dimen/margin_padding_size_small_xl"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_body1"
+                    tools:text="Total Items"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewData"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/margin_big_1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_counter_list" />
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

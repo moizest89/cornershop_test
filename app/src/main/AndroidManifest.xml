@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cornershop.counterstest">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -17,25 +18,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CountersNormal"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".presentation.counter.list.CounterListActivity"
-            android:label="@string/title_activity_counter_list"
+        <activity android:name=".presentation.splash.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".presentation.counter.add.CounterAddActivity"
+            android:label="@string/create_counter"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".presentation.counter.list.CounterListActivity"
+            android:label="@string/title_activity_counter_list"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".presentation.welcome.WelcomeActivity"
-            android:theme="@style/Theme.CountersWelcome">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.CountersWelcome"/>
     </application>
 
 </manifest>

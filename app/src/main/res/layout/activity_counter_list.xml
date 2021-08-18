@@ -7,10 +7,10 @@
     tools:context=".presentation.counter.list.CounterListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.CountersNormal.AppBarOverlay"
-        android:id="@+id/appBarLayout"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -23,28 +23,42 @@
             app:popupTheme="@style/Theme.CountersNormal.PopupOverlay">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewSearchCounter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/margin_padding_size_mini_small"
                 android:layout_marginStart="@dimen/margin_padding_size_small"
+                android:layout_marginTop="@dimen/margin_padding_size_mini_small"
                 android:layout_marginEnd="@dimen/margin_padding_size_small"
                 android:layout_marginBottom="@dimen/margin_padding_size_mini_small"
-                app:cardCornerRadius="@dimen/radius_medium"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                app:cardCornerRadius="@dimen/radius_medium"
                 app:cardElevation="6dp">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
+                    android:id="@+id/editTextSearchInformation"
                     android:drawableStart="@drawable/ic_search"
                     android:drawablePadding="@dimen/margin_small"
                     android:hint="@string/search_counters"
                     android:paddingStart="@dimen/margin_padding_size_small_xl"
                     android:textColor="@color/black"
                     android:textColorHint="@color/primaryTextColor"
-                    android:textSize="@dimen/text_menu" />
+                    android:textSize="@dimen/text_menu"
+                    android:inputType="text" />
+                
+                <ImageView
+                    android:layout_width="@dimen/buttons_normal_size"
+                    android:layout_height="@dimen/buttons_normal_size"
+                    android:src="@drawable/ic_close_black"
+                    android:padding="12dp"
+                    android:layout_marginEnd="@dimen/margin_padding_size_small"
+                    android:layout_gravity="center|end"
+                    android:visibility="gone"
+                    android:id="@+id/imageViewRemoveFocus"
+                    />
             </androidx.cardview.widget.CardView>
 
         </androidx.appcompat.widget.Toolbar>
@@ -53,12 +67,15 @@
 
     <include layout="@layout/content_counter_list" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_white" />
+        android:layout_gravity="bottom|center"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/orange"
+        android:text="@string/add_counters"
+        android:visibility="gone"
+        app:icon="@drawable/ic_add_white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

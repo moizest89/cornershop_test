@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animationCache="true"
+    tools:context=".presentation.counter.add.CounterAddActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.CountersNormal.AppBarOverlay"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp"
+            app:popupTheme="@style/Theme.CountersNormal.PopupOverlay"
+            app:titleTextColor="@color/primaryTextColor">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButtonSave"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:animationCache="true"
+                android:text="@string/save"
+                android:enabled="false"
+                android:alpha="0.3"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/text_button"
+                android:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="@dimen/progress_small_size"
+                android:layout_height="@dimen/progress_small_size"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_padding_size_large"
+                android:animationCache="true"
+                android:indeterminateTint="@color/orange"
+                android:visibility="gone" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/content_counter_add" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

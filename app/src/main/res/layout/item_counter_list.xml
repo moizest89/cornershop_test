@@ -12,7 +12,7 @@
         android:layout_marginEnd="@dimen/margin_padding_size_small"
         android:clipToPadding="true"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="@dimen/radius_medium"
+        app:cardCornerRadius="@dimen/radius_small"
         app:cardElevation="0dp"
         app:contentPadding="@dimen/margin_padding_size_small">
 
@@ -107,13 +107,19 @@
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Button.Circle" />
 
             <ImageView
+                android:id="@+id/imageViewCheck"
                 android:layout_width="@dimen/buttons_normal_size"
                 android:layout_height="@dimen/buttons_normal_size"
-                android:src="@drawable/ic_check"
                 android:layout_gravity="center"
-                android:visibility="gone"
-                android:id="@+id/imageViewCheck"
-                />
+                android:src="@drawable/ic_check"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:alpha="0.1"
+        android:background="@color/gray" />
 </FrameLayout>
