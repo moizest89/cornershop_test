@@ -51,7 +51,7 @@ object AppModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Utils.API_URL)
+            .baseUrl(BuildConfig.API_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
