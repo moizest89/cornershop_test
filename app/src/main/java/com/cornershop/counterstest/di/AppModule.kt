@@ -5,11 +5,18 @@ import androidx.room.Room
 import com.cornershop.counterstest.BuildConfig
 import com.cornershop.counterstest.data.datasources.db.CounterDao
 import com.cornershop.counterstest.data.datasources.db.CounterDataBase
+import com.cornershop.counterstest.data.datasources.db.DataBaseDataSource
+import com.cornershop.counterstest.data.datasources.db.DataBaseDataSourceImpl
 import com.cornershop.counterstest.data.datasources.remote.ConnectivityInterceptor
 import com.cornershop.counterstest.data.datasources.remote.RemoteDataService
+import com.cornershop.counterstest.data.datasources.remote.RemoteDataSource
+import com.cornershop.counterstest.data.datasources.remote.RemoteDataSourceImpl
 import com.cornershop.counterstest.data.datasources.sharepreference.SharePreference
-import com.cornershop.counterstest.data.utils.Utils
+import com.cornershop.counterstest.data.repository.count.CounterRepositoryImpl
+import com.cornershop.counterstest.data.repository.user.UserRepositoryImpl
 import com.cornershop.counterstest.data.utils.WifiService
+import com.cornershop.counterstest.domain.repository.counter.CounterRepository
+import com.cornershop.counterstest.domain.repository.user.UserRepository
 import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.Module
 import dagger.Provides
@@ -92,5 +99,35 @@ object AppModule {
 
     @Provides
     fun providerSharePreference(@ApplicationContext context: Context) = SharePreference(context)
+
+    //Repositories
+    //Counter
+    @Provides
+    fun provideRemoteDataSourceImpl(
+        remoteDataService: RemoteDataService
+    ): RemoteDataSource {
+        return RemoteDataSourceImpl(remoteDataService)
+    }
+
+    @Provides
+    fun provideDataBaseDataSourceImpl(
+        counterDao: CounterDao
+    ): DataBaseDataSource {
+        return DataBaseDataSourceImpl(counterDao)
+    }
+
+    @Provides
+    fun provideCounterRepositoryImpl(
+        remoteDataSource: RemoteDataSourceImpl,
+        dataBaseDataSource: DataBaseDataSourceImpl
+    ): CounterRepository {
+        return CounterRepositoryImpl(remoteDataSource, dataBaseDataSource)
+    }
+
+    //User
+    @Provides
+    fun provideUserRepositoryImpl(
+        sharePreference: SharePreference
+    ): UserRepository = UserRepositoryImpl(sharePreference)
 
 }

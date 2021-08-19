@@ -1,13 +1,13 @@
 package com.cornershop.counterstest.domain.usecases.counter
 
-import com.cornershop.counterstest.data.repository.count.CounterRepositoryImpl
 import com.cornershop.counterstest.data.utils.RepositoryResult
+import com.cornershop.counterstest.domain.repository.counter.CounterRepository
 import com.cornershop.counterstest.domain.utils.Command
 import com.cornershop.counterstest.domain.utils.toCommandError
 import javax.inject.Inject
 
 class SearchCountItemByTitleUseCase @Inject constructor(
-    private val counterRepository: CounterRepositoryImpl
+    private val counterRepository: CounterRepository
 ) {
     suspend fun invoke( name : String) : Command {
         return when(val result = counterRepository.searchCountItemsByName(name)){
