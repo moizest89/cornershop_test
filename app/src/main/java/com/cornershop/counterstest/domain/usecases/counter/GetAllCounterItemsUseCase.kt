@@ -1,7 +1,7 @@
 package com.cornershop.counterstest.domain.usecases.counter
 
-import com.cornershop.counterstest.data.repository.count.CounterRepositoryImpl
 import com.cornershop.counterstest.data.utils.RepositoryResult
+import com.cornershop.counterstest.domain.repository.counter.CounterRepository
 import com.cornershop.counterstest.domain.utils.Command
 import com.cornershop.counterstest.domain.utils.toCommandError
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetAllCounterItemsUseCase @Inject constructor(
-    private val counterRepository: CounterRepositoryImpl
+    private val counterRepository: CounterRepository
 ) {
 
     suspend fun invoke(): Flow<Command> = counterRepository.getAllCounterItems().map {
