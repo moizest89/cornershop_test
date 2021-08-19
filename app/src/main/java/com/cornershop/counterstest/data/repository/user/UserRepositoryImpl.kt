@@ -8,7 +8,7 @@ import com.cornershop.counterstest.domain.models.UserModel
 import com.cornershop.counterstest.domain.repository.user.UserRepository
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(
+class UserRepositoryImpl constructor(
     private val sharePreference: SharePreference,
 ) : UserRepository {
 

@@ -1,7 +1,7 @@
 package com.cornershop.counterstest.data.repository.count
 
-import com.cornershop.counterstest.data.datasources.db.DataBaseDataSourceImpl
-import com.cornershop.counterstest.data.datasources.remote.RemoteDataSourceImpl
+import com.cornershop.counterstest.data.datasources.db.DataBaseDataSource
+import com.cornershop.counterstest.data.datasources.remote.RemoteDataSource
 import com.cornershop.counterstest.data.mappers.toCountActionRequest
 import com.cornershop.counterstest.data.mappers.toCountItemList
 import com.cornershop.counterstest.data.mappers.toCountModel
@@ -15,11 +15,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
-class CounterRepositoryImpl @Inject constructor(
-    private val remoteDataSource: RemoteDataSourceImpl,
-    private val dataBaseDataSource: DataBaseDataSourceImpl
+class CounterRepositoryImpl constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val dataBaseDataSource: DataBaseDataSource
 ) : CounterRepository {
 
     override suspend fun getAllCounterItems(): Flow<RepositoryResult<MutableList<CountModel>>> {
