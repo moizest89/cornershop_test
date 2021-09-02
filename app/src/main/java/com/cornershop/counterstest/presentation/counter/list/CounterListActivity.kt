@@ -211,7 +211,7 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
 
     override fun onDeleteItemCount(counterItem: CountModel, position: Int) {
         AlertDialog.Builder(this)
-            .setMessage(getString(R.string.delete_confirmation_message, counterItem.title))
+            .setMessage(getString(R.string.delete_x_question, counterItem.title))
             .setPositiveButton(R.string.delete) { _, _ ->
                 this.counterListViewModel.deleteCounterItem(counterItem)
             }
@@ -224,14 +224,21 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
     override fun onDeleteItemsCount(counterItems: MutableList<CountModel>) {
         if (counterItems.isNotEmpty()) {
             AlertDialog.Builder(this)
-                .setMessage(getString(R.string.delete_x_question, counterItems.map { it.title }))
+                .setMessage(getString(R.string.delete_x_question, counterItems.joinToString { it.title }))
                 .setPositiveButton(R.string.delete) { _, _ ->
-                    this.counterListViewModel.deleteCounterItems(counterItems)
+                    deleteItems()
                 }
-                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .setNegativeButton(android.R.string.cancel) { _, _ ->
+                    this.adapter.resetItemsCounterSelected()
+                }
                 .setCancelable(false)
                 .show()
         }
+    }
+
+    private fun deleteItems(){
+        this.counterListViewModel.deleteCounterItems(this.adapter.getItemsCounterSelected())
+        this.adapter.resetItemsCounterSelected()
     }
 
     override fun counterItemsAndTimes(itemsCount: Int, timesCount: Int) {
@@ -329,7 +336,6 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
                 )
                 mode.finish()
                 this.mModeIsVisible = false
-                this.adapter.resetItemsCounterSelected()
                 true
             }
             R.id.menu_share_action -> {
