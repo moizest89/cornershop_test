@@ -1,5 +1,6 @@
 package com.cornershop.counterstest.presentation.counter.list
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,9 @@ import com.cornershop.counterstest.presentation.utils.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -21,6 +24,7 @@ class CounterListViewModel @Inject constructor(
     private val getAllCounterItemsUseCase: GetAllCounterItemsUseCase,
     private val addCountItemUseCase: AddCountItemUseCase,
     private val deleteCounterItemUseCase: DeleteCounterItemUseCase,
+    private val deleteCounterItemsUseCase: DeleteCounterItemsUseCase,
     private val incrementCountByItemUseCase: IncrementCountByItemUseCase,
     private val decrementCountByItemUseCase: DecrementCountByItemUseCase,
     private val searchCountItemByTitleUseCase: SearchCountItemByTitleUseCase
@@ -67,19 +71,40 @@ class CounterListViewModel @Inject constructor(
 
     fun searchCounterItemByName(name: String) {
         viewModelScope.launch {
-            val items = withContext(Dispatchers.IO){
+            val items = withContext(Dispatchers.IO) {
                 searchCountItemByTitleUseCase.invoke(name)
             }
             counterData.value = items
         }
     }
 
-    fun deleteItemCounterItem(countModel: CountModel, position: Int) {
+    fun deleteCounterItems(counterItems: MutableList<CountModel>) {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            counterData.value = deleteCounterItemUseCase.invoke(countModel)
+            try {
+                val flowList = counterItems.asFlow()
+                    .flowOn(Dispatchers.IO)
+                    .collect { countModel ->
+                        counterData.value = deleteCounterItemUseCase.invoke(countModel)
+                    }
+            } catch (exception: Exception) {
+                log(exception)
+                counterData.value = Command.Error(CommandError.SimpleErrorMessage())
+            }
             counterData.value = Command.Loading(isLoading = false)
         }
+    }
+
+    fun deleteCounterItem(counterItem: CountModel) {
+        viewModelScope.launch {
+            counterData.value = Command.Loading(isLoading = true)
+            counterData.value = deleteCounterItemUseCase.invoke(counterItem)
+            counterData.value = Command.Loading(isLoading = false)
+        }
+    }
+
+    fun log(exception: Exception){
+        Log.e(CounterListViewModel::class.java.simpleName , Log.getStackTraceString(exception))
     }
 
 }

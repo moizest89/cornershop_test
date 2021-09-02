@@ -8,6 +8,7 @@ interface CounterRepository {
     suspend fun getAllCounterItems(): Flow<RepositoryResult<MutableList<CountModel>>>
     suspend fun addCounterItem(name: String): RepositoryResult<CountModel>
     suspend fun deleteCounterItem(countModel: CountModel): RepositoryResult<CountModel>
+    suspend fun deleteCounterItems(countModel: MutableList<CountModel>): Flow<RepositoryResult<MutableList<CountModel>>>
     suspend fun incrementCounterItem(countModel: CountModel): RepositoryResult<CountModel>
     suspend fun decrementCounterItem(countModel: CountModel): RepositoryResult<CountModel>
     suspend fun searchCountItemsByName(name: String): RepositoryResult<MutableList<CountModel>>

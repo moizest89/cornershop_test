@@ -11,8 +11,8 @@ import com.cornershop.counterstest.data.utils.RepositoryResult
 import com.cornershop.counterstest.domain.models.CountModel
 import com.cornershop.counterstest.domain.repository.counter.CounterRepository
 import com.cornershop.counterstest.domain.utils.errorMessage
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -88,6 +88,17 @@ class CounterRepositoryImpl constructor(
             return e.errorMessage()
         } catch (e: HttpException) {
             return e.errorMessage()
+        }
+    }
+
+    override suspend fun deleteCounterItems(countModel: MutableList<CountModel>): Flow<RepositoryResult<MutableList<CountModel>>> {
+        return flow {
+            emit(RepositoryResult.Loading())
+            countModel.asFlow().flowOn(Dispatchers.IO).collect { countModel ->
+                deleteCounterItem( countModel )
+            }
+            emit(RepositoryResult.Success(data = dataBaseDataSource.getAllCountItems().toCountModel()))
+            emit(RepositoryResult.Loading(false))
         }
     }
 

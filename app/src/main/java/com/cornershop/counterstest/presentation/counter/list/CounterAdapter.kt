@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.domain.models.CountModel
 import com.google.android.material.button.MaterialButton
-import java.util.*
 
 class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
     RecyclerView.Adapter<CounterAdapter.Holder>() {
 
     private val counterList = mutableListOf<CountModel>()
+    private val counterItemSelectedList = mutableListOf<CountModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder =
         Holder(LayoutInflater.from(parent.context).inflate(R.layout.item_counter_list, null))
@@ -37,12 +37,6 @@ class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
         holder.materialButtonDecrement.visibility = View.VISIBLE
         holder.textViewCounter.visibility = View.VISIBLE
 
-        //Delete
-        holder.materialButtonDelete.setOnClickListener {
-            this.onCounterListener.onDeleteItemCount(
-                itemCounter, position
-            )
-        }
         //Increment
         holder.materialButtonIncrement.setOnClickListener {
             this.onCounterListener.onIncrementItemCount(
@@ -60,38 +54,53 @@ class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
         }
 
         holder.itemView.setOnLongClickListener { v ->
-            if (!onLongItemSelected) {
-                onCounterListener.onLongItemClick(true, v, itemCounter, position)
-                holder.cardViewMainContainer.setCardBackgroundColor(
-                    ContextCompat.getColor(
-                        holder.itemView.context,
-                        R.color.orange_20
-                    )
-                )
-                holder.imageViewCheck.visibility = View.VISIBLE
-                holder.materialButtonIncrement.visibility = View.GONE
-                holder.materialButtonDecrement.visibility = View.GONE
-                holder.textViewCounter.visibility = View.GONE
-                onLongItemSelected = true
-                onLongItemCounterItemSelected = itemCounter
-                onLongItemPositionSelected = position
-            } else {
-                onCounterListener.onLongItemClick(false, v, itemCounter, position)
-                onLongItemSelected = false
-                onLongItemCounterItemSelected = null
-                onLongItemPositionSelected = -1
-            }
+            onEvaluateSelectedItem(holder, itemCounter)
             true
         }
         holder.itemView.setOnClickListener { v ->
-            if (onLongItemSelected) {
-                onCounterListener.onLongItemClick(false, v, itemCounter, position)
-                onLongItemSelected = false
-                onLongItemCounterItemSelected = null
-                onLongItemPositionSelected = -1
+            if (onLongItemSelectedActive) {
+                onEvaluateSelectedItem(holder, itemCounter)
             }
         }
 
+    }
+
+    private fun onEvaluateSelectedItem(holder: Holder, itemCounter: CountModel) {
+        if (counterItemSelectedList.contains(itemCounter)) {
+            onDrawUnselectedItem(holder)
+            counterItemSelectedList.remove(itemCounter)
+        } else {
+            onDrawSelectedItem(holder)
+            counterItemSelectedList.add(itemCounter)
+        }
+        onLongItemSelectedActive = counterItemSelectedList.isNotEmpty()
+        onCounterListener.onLongItemClick(onLongItemSelectedActive, counterItemSelectedList)
+    }
+
+    private fun onDrawSelectedItem(holder: Holder) {
+        holder.cardViewMainContainer.setCardBackgroundColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.orange_20
+            )
+        )
+        holder.imageViewCheck.visibility = View.VISIBLE
+        holder.materialButtonIncrement.visibility = View.GONE
+        holder.materialButtonDecrement.visibility = View.GONE
+        holder.textViewCounter.visibility = View.GONE
+    }
+
+    private fun onDrawUnselectedItem(holder: Holder) {
+        holder.cardViewMainContainer.setCardBackgroundColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
+        holder.imageViewCheck.visibility = View.GONE
+        holder.materialButtonIncrement.visibility = View.VISIBLE
+        holder.materialButtonDecrement.visibility = View.VISIBLE
+        holder.textViewCounter.visibility = View.VISIBLE
     }
 
     fun addItem(countItem: CountModel?) {
@@ -131,16 +140,15 @@ class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
         this.onTotalSumCounter(this.counterList)
     }
 
-    fun searchElementInList( predicate : String){
 
+    fun getItemsCounterSelected(): MutableList<CountModel> {
+        return counterItemSelectedList
     }
 
-    fun getLongItemCounterItemSelected(): CountModel? {
-        return onLongItemCounterItemSelected
-    }
-
-    fun getLongItemPositionSelected(): Int {
-        return onLongItemPositionSelected
+    fun resetItemsCounterSelected() {
+        this.counterItemSelectedList.clear()
+        onLongItemSelectedActive = false
+        notifyDataSetChanged()
     }
 
     private fun onTotalSumCounter(counterList: MutableList<CountModel>) {
@@ -151,7 +159,6 @@ class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
     override fun getItemCount(): Int = this.counterList.size
 
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val materialButtonDelete: MaterialButton = itemView.findViewById(R.id.materialButtonDelete)
         val materialButtonIncrement: MaterialButton =
             itemView.findViewById(R.id.materialButtonIncrement)
         val materialButtonDecrement: MaterialButton =
@@ -165,19 +172,16 @@ class CounterAdapter(private val onCounterListener: CounterAdapterListener) :
     interface CounterAdapterListener {
         fun onIncrementItemCount(counterItem: CountModel, position: Int)
         fun onDecrementItemCount(counterItem: CountModel, position: Int)
-        fun onDeleteItemCount(counterItem: CountModel?, position: Int)
+        fun onDeleteItemCount(counterItem: CountModel, position: Int)
+        fun onDeleteItemsCount(counterItems: MutableList<CountModel>)
         fun counterItemsAndTimes(itemsCount: Int, timesCount: Int)
         fun onLongItemClick(
             showActionMode: Boolean,
-            view: View,
-            counterItem: CountModel?,
-            position: Int?
+            counterItemsSelected: MutableList<CountModel>
         )
     }
 
     companion object {
-        private var onLongItemSelected = false
-        private var onLongItemPositionSelected = -1
-        private var onLongItemCounterItemSelected: CountModel? = null
+        private var onLongItemSelectedActive = false
     }
 }
