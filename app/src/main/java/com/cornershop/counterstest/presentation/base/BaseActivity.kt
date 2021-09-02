@@ -1,6 +1,7 @@
 package com.cornershop.counterstest.presentation.base
 
 import android.app.Activity
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -19,5 +20,15 @@ open class BaseActivity : AppCompatActivity() {
             view = View(activity)
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

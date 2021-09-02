@@ -16,7 +16,8 @@
         android:layout_marginStart="@dimen/margin_padding_size_large"
         android:layout_marginEnd="@dimen/margin_padding_size_large"
         android:hint="@string/counter_name_label"
-        android:textColorHint="@color/gray"
+        android:textColorHint="@color/orange"
+        app:hintTextColor="@color/orange"
         app:boxBackgroundColor="@color/white"
         app:expandedHintEnabled="false"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -28,13 +29,22 @@
             android:id="@+id/default_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minLines="1"
-            android:maxLines="1"
-            android:singleLine="true"
             android:hint="@string/counter_name_hint"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
             android:textColorHighlight="@color/gray" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewGetExampleItem"
+        android:padding="@dimen/margin_padding_size_large"
+        android:text="@string/create_counter_disclaimer"
+        android:textColor="@color/gray" />
 
 
 </LinearLayout>

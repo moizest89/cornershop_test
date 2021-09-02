@@ -1,16 +1,19 @@
 <resources>
     <!-- Examples -->
+    <string name="drinks_title">Drinks</string>
     <string-array name="drinks_array">
         <item>Cups of coffee</item>
         <item>Glasses of water</item>
         <item>Tequila shots</item>
         <item>Caipirinhas</item>
     </string-array>
+    <string name="food_title">Food</string>
     <string-array name="food_array">
         <item>Hot-dogs</item>
         <item>Cupcakes eaten</item>
         <item>Chicken sandwich</item>
     </string-array>
+    <string name="misc_title">Misc</string>
     <string-array name="misc_array">
         <item>Times sneezed</item>
         <item>Naps</item>
@@ -51,9 +54,10 @@
     <string name="create_counter">Create counter</string>
     <string name="counter_name_label">Name</string>
     <string name="counter_name_hint">Cups of coffee</string>
-    <string name="create_counter_disclaimer">Give it a name. Creative block? See examples.</string>
+    <string name="create_counter_disclaimer">Give it a name. Creative block? See <u>examples.</u></string>
     <string name="delete_x_question">Delete "%s"?</string>
     <string name="n_per_counter_name">%d × %s</string>
     <string name="title_activity_counter_list">CounterListActivity</string>
     <string name="counter_alert_add_hint">Example: Cups of coffee</string>
+    <string name="title_activity_counter_examples">CounterExamplesActivity</string>
 </resources>

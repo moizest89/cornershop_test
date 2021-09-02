@@ -14,10 +14,14 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeCloseButtonStyle">@style/myclosebutton</item>
         <item name="actionModeStyle">@style/ActionModeStyle</item>
+        <item name="colorControlHighlight">@color/orange</item>
+        <item name="android:colorControlHighlight">@color/orange</item>
+
         <!--        <item name="android:textColorHint">@color/gray_600</item>-->
         <!--        <item name="colorControlHighlight">@color/gray_600</item>-->
 
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -58,6 +62,7 @@
     <style name="myclosebutton" parent="Widget.AppCompat.Light.ActionButton.CloseMode">
         <item name="android:tint">@color/orange</item>
     </style>
+
     <style name="ActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
         <item name="titleTextStyle">@style/ActionModeTitleTextStyle</item>
         <item name="elevationOverlayEnabled">true</item>

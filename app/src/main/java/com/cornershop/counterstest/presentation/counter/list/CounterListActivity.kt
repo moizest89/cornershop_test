@@ -186,6 +186,14 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
 
     private fun progressAction(isShowing: Boolean) {
         this.progressBar.visibility = if (isShowing) View.VISIBLE else View.GONE
+        if(isShowing){
+            if(this.linearLayoutEmptyState.visibility == View.VISIBLE) {
+                this.linearLayoutEmptyState.visibility = View.GONE
+            }
+            if (this.swipeRefreshLayout.visibility == View.VISIBLE){
+                swipeRefreshLayout.isRefreshing = true
+            }
+        }
     }
 
     private fun onAddItemCount(name: String) {

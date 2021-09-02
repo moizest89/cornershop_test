@@ -18,7 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CountersNormal"
         android:usesCleartextTraffic="true">
-        <activity android:name=".presentation.splash.SplashActivity"
+        <activity
+            android:name=".presentation.counter.examples.CounterExamplesActivity"
+            android:label="@string/title_activity_counter_examples"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".presentation.splash.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,10 +37,10 @@
         <activity
             android:name=".presentation.counter.list.CounterListActivity"
             android:label="@string/title_activity_counter_list"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".presentation.welcome.WelcomeActivity"
-            android:theme="@style/Theme.CountersWelcome"/>
+            android:theme="@style/Theme.CountersWelcome" />
     </application>
 
 </manifest>
