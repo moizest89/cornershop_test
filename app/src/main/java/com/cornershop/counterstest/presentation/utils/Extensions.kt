@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 
 
 fun EditText.onTextChange( onText : (s: CharSequence?) -> Unit ) : EditText{
@@ -18,17 +19,24 @@ fun EditText.onTextChange( onText : (s: CharSequence?) -> Unit ) : EditText{
     return this
 }
 
-fun EditText.showKeyboard(
-) {
-    requestFocus()
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as
-            InputMethodManager
-    imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-}
-
 fun EditText.hideKeyboard(
 ) {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as
             InputMethodManager
     imm.hideSoftInputFromWindow(this.windowToken, 0)
+}
+
+fun Context.showKeyboard(editText: EditText) {
+    val inputMethodManager: InputMethodManager =
+        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.toggleSoftInputFromWindow(
+        editText.applicationWindowToken,
+        InputMethodManager.SHOW_IMPLICIT, 0
+    )
+    editText.requestFocus()
+    editText.setSelection(editText.text.length)
+}
+
+fun TextView.setUnderlineText(){
+
 }

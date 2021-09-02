@@ -3,35 +3,42 @@ package com.cornershop.counterstest.presentation.counter.add
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.TextView.OnEditorActionListener
+import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
 import com.cornershop.counterstest.R
 import com.cornershop.counterstest.domain.utils.Command
 import com.cornershop.counterstest.domain.utils.CommandError
+import com.cornershop.counterstest.presentation.base.BaseActivity
+import com.cornershop.counterstest.presentation.counter.examples.CounterExamplesActivity
 import com.cornershop.counterstest.presentation.counter.list.CounterListViewModel
 import com.cornershop.counterstest.presentation.utils.Utils
 import com.cornershop.counterstest.presentation.utils.onTextChange
+import com.cornershop.counterstest.presentation.utils.showKeyboard
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class CounterAddActivity : AppCompatActivity() {
+class CounterAddActivity : BaseActivity(), ActivityResultCallback<ActivityResult> {
 
     private lateinit var toolbar: Toolbar
     private lateinit var progressBar: ProgressBar
     private lateinit var materialButtonSave: MaterialButton
+    private lateinit var textViewGetExampleItem: TextView
     private lateinit var textInputLayoutCounterName: TextInputLayout
 
     private val counterListViewModel by viewModels<CounterListViewModel>()
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +73,10 @@ class CounterAddActivity : AppCompatActivity() {
             sendData()
         }
 
+        this.textViewGetExampleItem.setOnClickListener {
+            getItemExample()
+        }
+
     }
 
     private fun sendData() {
@@ -81,6 +92,7 @@ class CounterAddActivity : AppCompatActivity() {
         this.toolbar = this.findViewById(R.id.toolbar)
         this.progressBar = this.findViewById(R.id.progressBar)
         this.materialButtonSave = this.findViewById(R.id.materialButtonSave)
+        this.textViewGetExampleItem = this.findViewById(R.id.textViewGetExampleItem)
         this.textInputLayoutCounterName = this.findViewById(R.id.textInputLayoutCounterName)
     }
 
@@ -133,14 +145,20 @@ class CounterAddActivity : AppCompatActivity() {
         this.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
+    private fun getItemExample() {
+        startForResult.launch(Intent(this, CounterExamplesActivity::class.java))
+    }
+
+    override fun onActivityResult(result: ActivityResult?) {
+        if (result?.resultCode == RESULT_OK) {
+            result.data?.extras?.getString(Utils.DATA)?.let {
+                textInputLayoutCounterName.editText?.let { editText ->
+                    editText.setText(it)
+                    editText.setSelection(it.length)
+                    this.showKeyboard(editText)
+                }
             }
         }
-        return super.onOptionsItemSelected(item)
     }
 
 }
