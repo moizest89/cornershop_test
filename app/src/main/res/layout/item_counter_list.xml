@@ -21,27 +21,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/materialButtonDelete"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon"
-                android:layout_width="@dimen/buttons_small_size"
-                android:layout_height="@dimen/buttons_small_size"
-                android:layout_gravity="start|center"
-                android:alpha="0.2"
-                android:backgroundTint="@color/gray_100"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="0dp"
-                android:stateListAnimator="@null"
-                android:visibility="gone"
-                app:icon="@drawable/ic_delete_black"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:iconTint="@color/black"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Button.Circle" />
-
             <TextView
                 android:id="@+id/textViewCounterName"
                 android:layout_width="0dp"

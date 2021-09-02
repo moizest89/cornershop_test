@@ -67,17 +67,25 @@ class CounterListViewModel @Inject constructor(
 
     fun searchCounterItemByName(name: String) {
         viewModelScope.launch {
-            val items = withContext(Dispatchers.IO){
+            val items = withContext(Dispatchers.IO) {
                 searchCountItemByTitleUseCase.invoke(name)
             }
             counterData.value = items
         }
     }
 
-    fun deleteItemCounterItem(countModel: CountModel, position: Int) {
+    fun deleteCounterItems(counterItems: MutableList<CountModel>) {
         viewModelScope.launch {
             counterData.value = Command.Loading(isLoading = true)
-            counterData.value = deleteCounterItemUseCase.invoke(countModel)
+//            counterData.value = deleteCounterItemUseCase.invoke(countModel)
+            counterData.value = Command.Loading(isLoading = false)
+        }
+    }
+
+    fun deleteCounterItem(counterItem: CountModel) {
+        viewModelScope.launch {
+            counterData.value = Command.Loading(isLoading = true)
+            counterData.value = deleteCounterItemUseCase.invoke(counterItem)
             counterData.value = Command.Loading(isLoading = false)
         }
     }

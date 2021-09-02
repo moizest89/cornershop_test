@@ -64,6 +64,7 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult(), this)
     private var mMode: ActionMode? = null
+    private var mModeIsVisible: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,13 +137,13 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
                 this.swipeRefreshLayout.isRefreshing = command.isLoading
             }
             is Command.SearchCounterItemData -> {
-                if(command.data.isNotEmpty()){
-                    if(this.swipeRefreshLayout.visibility == View.GONE) {
+                if (command.data.isNotEmpty()) {
+                    if (this.swipeRefreshLayout.visibility == View.GONE) {
                         this.swipeRefreshLayout.visibility = View.VISIBLE
                     }
                     this.adapter.addItems(command.data)
                     this.textViewSearchResult.visibility = View.GONE
-                }else{
+                } else {
                     this.textViewSearchResult.visibility = View.VISIBLE
                     this.swipeRefreshLayout.visibility = View.GONE
                 }
@@ -186,11 +187,11 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
 
     private fun progressAction(isShowing: Boolean) {
         this.progressBar.visibility = if (isShowing) View.VISIBLE else View.GONE
-        if(isShowing){
-            if(this.linearLayoutEmptyState.visibility == View.VISIBLE) {
+        if (isShowing) {
+            if (this.linearLayoutEmptyState.visibility == View.VISIBLE) {
                 this.linearLayoutEmptyState.visibility = View.GONE
             }
-            if (this.swipeRefreshLayout.visibility == View.VISIBLE){
+            if (this.swipeRefreshLayout.visibility == View.VISIBLE) {
                 swipeRefreshLayout.isRefreshing = true
             }
         }
@@ -208,12 +209,24 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
         this.counterListViewModel.decrementCounterItem(counterItem, position)
     }
 
-    override fun onDeleteItemCount(counterItem: CountModel?, position: Int) {
-        counterItem?.let {
+    override fun onDeleteItemCount(counterItem: CountModel, position: Int) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.delete_confirmation_message, counterItem.title))
+            .setPositiveButton(R.string.delete) { _, _ ->
+                this.counterListViewModel.deleteCounterItem(counterItem)
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .setCancelable(false)
+            .show()
+
+    }
+
+    override fun onDeleteItemsCount(counterItems: MutableList<CountModel>) {
+        if (counterItems.isNotEmpty()) {
             AlertDialog.Builder(this)
-                .setMessage(getString(R.string.delete_confirmation_message, counterItem.title))
+                .setMessage(getString(R.string.delete_x_question, counterItems.map { it.title }))
                 .setPositiveButton(R.string.delete) { _, _ ->
-                    this.counterListViewModel.deleteItemCounterItem(counterItem, position)
+                    this.counterListViewModel.deleteCounterItems(counterItems)
                 }
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .setCancelable(false)
@@ -230,16 +243,19 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
 
     override fun onLongItemClick(
         showActionMode: Boolean,
-        view: View,
-        counterItem: CountModel?,
-        position: Int?
+        counterItemsSelected: MutableList<CountModel>
     ) {
-        if (showActionMode) {
-            this.startSupportActionMode(this)
-            this.mMode?.title = getString(R.string.n_selected, 1)
+        if (counterItemsSelected.isNotEmpty()) {
+            if (!mModeIsVisible) {
+                this.mMode = this.startSupportActionMode(this)
+                mModeIsVisible = true
+            }
+            this.mMode?.title = getString(R.string.n_selected, counterItemsSelected.size)
             this.appBarLayout.elevation = 12.0f
         } else {
             this.mMode?.finish()
+            this.mModeIsVisible = false
+            this.adapter.resetItemsCounterSelected()
         }
     }
 
@@ -308,18 +324,21 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.menu_delete_action -> {
-                onDeleteItemCount(
-                    this.adapter.getLongItemCounterItemSelected(),
-                    this.adapter.getLongItemPositionSelected()
+                onDeleteItemsCount(
+                    this.adapter.getItemsCounterSelected()
                 )
                 mode.finish()
+                this.mModeIsVisible = false
+                this.adapter.resetItemsCounterSelected()
                 true
             }
             R.id.menu_share_action -> {
                 onShareItemCount(
-                    this.adapter.getLongItemCounterItemSelected()
+                    this.adapter.getItemsCounterSelected()
                 )
                 mode.finish()
+                this.mModeIsVisible = false
+                this.adapter.resetItemsCounterSelected()
                 true
             }
             else -> false
@@ -327,14 +346,18 @@ class CounterListActivity : BaseActivity(), CounterAdapter.CounterAdapterListene
     }
 
     private fun onShareItemCount(
-        longItemCounterItemSelected: CountModel?
+        longItemCounterItemSelected: MutableList<CountModel>
     ) {
-        longItemCounterItemSelected?.let { countModel ->
+        if (longItemCounterItemSelected.isNotEmpty()) {
             Intent().apply {
+                //getString(R.string.n_per_counter_name, countModel.count, countModel.title)
+                val names: String = longItemCounterItemSelected.joinToString { countModel ->
+                    getString(R.string.n_per_counter_name, countModel.count, countModel.title)
+                }
                 action = Intent.ACTION_SEND
                 putExtra(
                     Intent.EXTRA_TEXT,
-                    getString(R.string.n_per_counter_name, countModel.count, countModel.title)
+                    names
                 )
                 type = "text/plain"
                 startActivity(Intent.createChooser(this, getString(R.string.share)))
